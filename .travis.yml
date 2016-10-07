@@ -45,4 +45,6 @@ script:
        PYTHONPATH=$PWD:$PYTHONPATH py.test tests/;
     fi
 after_success:
-  - coveralls
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      coveralls;
+    fi
