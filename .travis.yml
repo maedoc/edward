@@ -29,7 +29,7 @@ install:
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy pystan pytest
   - source activate test-environment
   - pip install pep8 pytest-pep8 pytest-xdist
-  - pip install python-coveralls pytest-cov
+  - pip install coveralls
   - pip install numpydoc
   - pip install git+https://github.com/pymc-devs/pymc3
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
@@ -45,6 +45,4 @@ script:
        PYTHONPATH=$PWD:$PYTHONPATH py.test tests/;
     fi
 after_success:
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      coveralls;
-    fi
+  - coveralls
