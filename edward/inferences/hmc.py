@@ -116,8 +116,8 @@ class HMC(MonteCarlo):
 
       for x, obs in six.iteritems(self.data):
         if isinstance(x, RandomVariable):
-          x_z = copy(x, z_sample, scope='likelihood' + str(self.scope_iter))
-          log_joint += tf.reduce_sum(x_z.log_prob(obs))
+          x_copy = copy(x, z_sample, scope='likelihood' + str(self.scope_iter))
+          log_joint += tf.reduce_sum(x_copy.log_prob(obs))
     else:
       x = self.data
       log_joint = self.model_wrapper.log_prob(x, z_sample)

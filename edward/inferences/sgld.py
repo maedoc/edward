@@ -85,12 +85,20 @@ class SGLD(MonteCarlo):
       log_joint = 0.0
       for z, sample in six.iteritems(z_sample):
         z = copy(z, z_sample, scope='prior')
-        log_joint += tf.reduce_sum(z.log_prob(sample))
+        z_log_prob = tf.reduce_sum(z.log_prob(sample))
+        if z in self.scale:
+          z_log_prob *= self.scale[z]
+
+        log_joint += z_log_prob
 
       for x, obs in six.iteritems(self.data):
         if isinstance(x, RandomVariable):
-          x_z = copy(x, z_sample, scope='likelihood')
-          log_joint += tf.reduce_sum(x_z.log_prob(obs))
+          x_copy = copy(x, z_sample, scope='likelihood')
+          x_log_prob = tf.reduce_sum(x_copy.log_prob(obs))
+          if x in self.scale:
+            x_log_prob *= self.scale[x]
+
+          log_joint += x_log_prob
     else:
       x = self.data
       log_joint = self.model_wrapper.log_prob(x, z_sample)
